@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: If you use this software, please cite it as below.
+authors:
+  - family-names: Brace
+    given-names: Alexander
+    orcid: https://orcid.org/0000-0001-9873-9177
+license: MIT
+repository-code: https://github.com/ramanathanlab/parsl_esmfold
+title: parsl_esmfold
+url: https://github.com/ramanathanlab/parsl_esmfold
