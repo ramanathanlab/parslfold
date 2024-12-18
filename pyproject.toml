@@ -18,6 +18,9 @@ classifiers = [
 ]
 dependencies = [
     "parsl>=2024.10.14",
+    "biotite>=1.0.1",
+    "pydantic",
+    "parsl-object-registry @ git+https://github.com/braceal/parsl_object_registry.git",
 ]
 
 [project.urls]
