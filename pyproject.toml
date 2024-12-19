@@ -21,6 +21,7 @@ dependencies = [
     "torch",
     "biopython",
     "pydantic",
+    "PyYAML",
     "parsl-object-registry @ git+https://github.com/braceal/parsl_object_registry.git",
 ]
 
