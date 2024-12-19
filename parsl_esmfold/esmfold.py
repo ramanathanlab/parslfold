@@ -7,7 +7,7 @@ import re
 from pathlib import Path
 
 import torch
-from biotite.structure.io.pdb import PDBFile
+from Bio.PDB import PDBParser
 from parsl_object_registry import clear_torch_cuda_memory_callback
 from parsl_object_registry import register
 from pydantic import BaseModel
@@ -44,6 +44,38 @@ def read_fasta(fasta_file: str | Path) -> list[Sequence]:
         Sequence(sequence=seq, tag=tag)
         for seq, tag in zip(lines[1::2], lines[::2])
     ]
+
+
+def parse_plddt(pdb_file: str | io.StringIO) -> float:
+    """Parse the pLDDT score from the structure file.
+
+    Parameters
+    ----------
+    pdb_file : str
+        The path to the PDB file.
+
+    Returns
+    -------
+    float
+        The mean pLDDT score of the structure.
+    """
+    # Parse the PDB file
+    parser = PDBParser()
+    structure = parser.get_structure('id', pdb_file)
+
+    # Collect B-factors
+    b_factors = []
+    for model in structure:
+        for chain in model:
+            for residue in chain:
+                for atom in residue:
+                    # Get the B-factor of the atom
+                    b_factors.append(atom.bfactor)
+
+    # Calculate the mean B-factor
+    plddt = sum(b_factors) / len(b_factors)
+
+    return plddt
 
 
 @register(shutdown_callback=clear_torch_cuda_memory_callback)
@@ -98,13 +130,7 @@ class EsmFold:
         # Get the predicted structure as a string containing PDB file contents
         structure = self.model.infer_pdb(sequence)
 
-        # Read the structure into a PDBFile object
-        pdb_file = PDBFile.read(io.StringIO(structure))
-
-        # Create a structure object in Biotite
-        struct = pdb_file.get_structure(extra_fields=['b_factor'])
-
-        # Extract the pLDDT score
-        plddt = float(struct.b_factor.mean())
+        # Extract the pLDDT score from the structure
+        plddt = parse_plddt(io.StringIO(structure))
 
         return structure, plddt
