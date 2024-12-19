@@ -7,6 +7,8 @@ from pathlib import Path
 
 from parsl.concurrent import ParslPoolExecutor
 from pydantic import Field
+from pydantic import model_validator
+from typing_extensions import Self
 
 from parsl_esmfold.esmfold import read_fasta
 from parsl_esmfold.esmfold import Sequence
@@ -39,6 +41,26 @@ class EsmFoldWorkflowConfig(BaseModel):
         ...,
         description='A Parsl compute configuration for the ESM-Fold workflow.',
     )
+
+    @model_validator(mode='after')
+    def _validate_paths(self) -> Self:
+        # Check if the paths exist
+        if not self.fasta_path.exists():
+            raise FileNotFoundError(f'Fasta path not found: {self.fasta_path}')
+        if not self.torch_hub_dir.exists():
+            raise FileNotFoundError(
+                f'Torch hub directory not found: {self.torch_hub_dir}',
+            )
+
+        # Create the output directory if it does not exist
+        self.output_dir.mkdir(exist_ok=True, parents=True)
+
+        # Resolve the paths
+        self.fasta_path = self.fasta_path.resolve()
+        self.output_dir = self.output_dir.resolve()
+        self.torch_hub_dir = self.torch_hub_dir.resolve()
+
+        return self
 
 
 def esmfold_worker(
@@ -98,9 +120,6 @@ if __name__ == '__main__':
 
     # Load the configuration
     config = EsmFoldWorkflowConfig.from_yaml(args.config_path)
-
-    # Make the output directory
-    config.output_dir.mkdir(exist_ok=True, parents=True)
 
     # Log the configuration
     config.dump_yaml(config.output_dir / 'config.yaml')
