@@ -6,7 +6,7 @@ Implementation of [ESMFold](https://www.science.org/doi/10.1126/science.ade2574)
 To install the package, run the following command:
 ```bash
 git clone git@github.com:ramanathanlab/parsl_esmfold.git
-cd deepdrivewe
+cd parsl_esmfold
 pip install -U pip setuptools wheel
 pip install -e .
 ```
