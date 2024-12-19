@@ -18,6 +18,7 @@ classifiers = [
 ]
 dependencies = [
     "parsl>=2024.10.14",
+    "torch",
     "biotite",
     "pydantic",
     "parsl-object-registry @ git+https://github.com/braceal/parsl_object_registry.git",
