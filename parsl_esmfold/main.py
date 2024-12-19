@@ -15,7 +15,7 @@ from parsl_esmfold.utils import BaseModel
 from parsl_esmfold.utils import batch_data
 
 
-class ESMFoldWorkflowConfig(BaseModel):
+class EsmFoldWorkflowConfig(BaseModel):
     """ESM-Fold workflow configuration."""
 
     fasta_path: Path = Field(
@@ -97,7 +97,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     # Load the configuration
-    config = ESMFoldWorkflowConfig.from_yaml(args.config_path)
+    config = EsmFoldWorkflowConfig.from_yaml(args.config_path)
 
     # Make the output directory
     config.output_dir.mkdir(exist_ok=True, parents=True)
