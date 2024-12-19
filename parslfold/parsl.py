@@ -14,9 +14,8 @@ from parsl.executors import HighThroughputExecutor
 from parsl.launchers import MpiExecLauncher
 from parsl.providers import LocalProvider
 from parsl.providers import PBSProProvider
-from pydantic import Field
-
 from parsl_esmfold.utils import BaseModel
+from pydantic import Field
 
 try:
     from typing import Literal

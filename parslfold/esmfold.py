@@ -3,79 +3,14 @@
 from __future__ import annotations
 
 import io
-import re
 from pathlib import Path
 
 import torch
-from Bio.PDB import PDBParser
 from parsl_object_registry import clear_torch_cuda_memory_callback
 from parsl_object_registry import register
-from pydantic import BaseModel
-from pydantic import Field
 
-from parsl_esmfold.utils import exception_handler
-
-
-class Sequence(BaseModel):
-    """Amino acid sequence and description tag."""
-
-    sequence: str = Field(
-        ...,
-        description='Amino acid sequence.',
-    )
-    tag: str = Field(
-        ...,
-        description='Sequence description tag (fasta header).',
-    )
-
-
-def read_fasta(fasta_file: str | Path) -> list[Sequence]:
-    """Read fasta file sequences and description tags into dataclass."""
-    text = Path(fasta_file).read_text()
-    pattern = re.compile('^>', re.MULTILINE)
-    non_parsed_seqs = re.split(pattern, text)[1:]
-    lines = [
-        line.replace('\n', '')
-        for seq in non_parsed_seqs
-        for line in seq.split('\n', 1)
-    ]
-
-    return [
-        Sequence(sequence=seq, tag=tag)
-        for seq, tag in zip(lines[1::2], lines[::2])
-    ]
-
-
-def parse_plddt(pdb_file: str | io.StringIO) -> float:
-    """Parse the pLDDT score from the structure file.
-
-    Parameters
-    ----------
-    pdb_file : str
-        The path to the PDB file.
-
-    Returns
-    -------
-    float
-        The mean pLDDT score of the structure.
-    """
-    # Parse the PDB file
-    parser = PDBParser()
-    structure = parser.get_structure('id', pdb_file)
-
-    # Collect B-factors
-    b_factors = []
-    for model in structure:
-        for chain in model:
-            for residue in chain:
-                for atom in residue:
-                    # Get the B-factor of the atom
-                    b_factors.append(atom.bfactor)
-
-    # Calculate the mean B-factor
-    plddt = sum(b_factors) / len(b_factors)
-
-    return plddt
+from parslfold.utils import exception_handler
+from parslfold.utils import parse_plddt
 
 
 @register(shutdown_callback=clear_torch_cuda_memory_callback)

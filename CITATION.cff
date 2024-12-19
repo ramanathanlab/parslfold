@@ -5,6 +5,6 @@ authors:
     given-names: Alexander
     orcid: https://orcid.org/0000-0001-9873-9177
 license: MIT
-repository-code: https://github.com/ramanathanlab/parsl_esmfold
-title: parsl_esmfold
-url: https://github.com/ramanathanlab/parsl_esmfold
+repository-code: https://github.com/ramanathanlab/parslfold
+title: parslfold
+url: https://github.com/ramanathanlab/parslfold
