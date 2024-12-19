@@ -10,7 +10,7 @@ authors = [
 ]
 description = "Run ESMFold in parallel using Parsl."
 readme = "README.md"
-requires-python = "<=3.9"
+requires-python = "<3.10"
 license = {text = "MIT"}
 classifiers = [
     "License :: OSI Approved :: MIT License",
@@ -18,7 +18,7 @@ classifiers = [
 ]
 dependencies = [
     "parsl>=2024.10.14",
-    "biotite>=1.0.1",
+    "biotite",
     "pydantic",
     "parsl-object-registry @ git+https://github.com/braceal/parsl_object_registry.git",
 ]
