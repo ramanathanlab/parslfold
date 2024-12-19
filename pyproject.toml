@@ -3,12 +3,12 @@ requires = ["setuptools>=64.0", "setuptools_scm"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "parsl_esmfold"
+name = "parslfold"
 version = "0.1.0"
 authors = [
     {name = "Alexander Brace", email = "abrace@anl.gov"},
 ]
-description = "Run ESMFold in parallel using Parsl."
+description = "Fold proteins in parallel using Parsl."
 readme = "README.md"
 requires-python = "<3.10"
 license = {text = "MIT"}
@@ -26,9 +26,9 @@ dependencies = [
 ]
 
 [project.urls]
-homepage = "https://github.com/ramanathanlab/parsl_esmfold"
-documentation = "https://github.com/ramanathanlab/parsl_esmfold"
-repository = "https://github.com/ramanathanlab/parsl_esmfold"
+homepage = "https://github.com/ramanathanlab/parslfold"
+documentation = "https://github.com/ramanathanlab/parslfold"
+repository = "https://github.com/ramanathanlab/parslfold"
 
 
 [project.optional-dependencies]
@@ -149,7 +149,7 @@ quote-style = "single"
 
 [tool.ruff.isort]
 force-single-line = true
-known-first-party = ["parsl_esmfold", "test", "testing"]
+known-first-party = ["parslfold", "test", "testing"]
 order-by-type = false
 required-imports = ["from __future__ import annotations"]
 

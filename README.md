@@ -1,12 +1,16 @@
-# parsl_esmfold
-Implementation of [ESMFold](https://www.science.org/doi/10.1126/science.ade2574) using [Parsl](https://parsl-project.org/).
+# parslfold
+Fold proteins in parallel using [Parsl](https://parsl-project.org/).
+
+Supported folding methods:
+- [Chai-1](https://github.com/chaidiscovery/chai-lab)
+- [ESMFold](https://github.com/facebookresearch/esm?tab=readme-ov-file#esmfold)
 
 ## Installation
 
 To install the package, run the following command:
 ```bash
-git clone git@github.com:ramanathanlab/parsl_esmfold.git
-cd parsl_esmfold
+git clone git@github.com:ramanathanlab/parslfold.git
+cd parslfold
 pip install -U pip setuptools wheel
 pip install -e .
 ```

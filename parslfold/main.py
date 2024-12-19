@@ -6,15 +6,14 @@ import argparse
 from pathlib import Path
 
 from parsl.concurrent import ParslPoolExecutor
-from pydantic import Field
-from pydantic import model_validator
-from typing_extensions import Self
-
 from parsl_esmfold.esmfold import read_fasta
 from parsl_esmfold.esmfold import Sequence
 from parsl_esmfold.parsl import ComputeConfigs
 from parsl_esmfold.utils import BaseModel
 from parsl_esmfold.utils import batch_data
+from pydantic import Field
+from pydantic import model_validator
+from typing_extensions import Self
 
 
 class EsmFoldWorkflowConfig(BaseModel):
