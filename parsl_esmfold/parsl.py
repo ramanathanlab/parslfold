@@ -87,26 +87,48 @@ class PolarisConfig(BaseComputeConfig):
 
     name: Literal['polaris'] = 'polaris'  # type: ignore[assignment]
 
-    num_nodes: int = 1
-    """Number of nodes to request"""
-    worker_init: str = ''
-    """How to start a worker. Should load any modules and environments."""
-    scheduler_options: str = '#PBS -l filesystems=home:eagle:grand'
-    """PBS directives, pass -J for array jobs."""
-    account: str
-    """The account to charge compute to."""
-    queue: str
-    """Which queue to submit jobs to, will usually be prod."""
-    walltime: str
-    """Maximum job time."""
-    cpus_per_node: int = 32
-    """Up to 64 with multithreading."""
-    cores_per_worker: float = 8
-    """Number of cores per worker. Evenly distributed between GPUs."""
-    retries: int = 0
-    """Number of retries upon failure."""
-    worker_debug: bool = False
-    """Enable worker debug."""
+    num_nodes: int = Field(
+        default=1,
+        description='Number of nodes to request.',
+    )
+    worker_init: str = Field(
+        default='',
+        description='Command to be run before starting a worker. '
+        'Load any modules and environments, etc.',
+    )
+    scheduler_options: str = Field(
+        default='#PBS -l filesystems=home:eagle:grand',
+        description='PBS directives, pass -J for array jobs.',
+    )
+    account: str = Field(
+        ...,
+        description='The account to charge compute to.',
+    )
+    queue: str = Field(
+        ...,
+        description='Which queue to submit jobs to, will usually be prod.',
+    )
+    walltime: str = Field(
+        ...,
+        description='Maximum job time.',
+    )
+    cpus_per_node: int = Field(
+        default=32,
+        description='Up to 64 with multithreading.',
+    )
+    cores_per_worker: float = Field(
+        default=8,
+        description='Number of cores per worker. '
+        'Evenly distributed between GPUs.',
+    )
+    retries: int = Field(
+        default=0,
+        description='Number of retries upon failure.',
+    )
+    worker_debug: bool = Field(
+        default=False,
+        description='Enable worker debug.',
+    )
 
     def get_parsl_config(self, run_dir: str | Path) -> Config:
         """Create a parsl configuration for running on Polaris@ALCF.

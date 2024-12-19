@@ -1,0 +1,22 @@
+# This is an example of a workstation configuration file.
+
+# The path to the directory where the data is stored
+# (can also specify the path to a single fasta file)
+fasta_path: examples/data
+
+# The path to the directory where the output files will be stored.
+# Will write a new subdirectory for each sequence containing the
+# folded structure PDB file and a JSON file with the plddt score.
+output_dir: examples/data/output
+
+# The number of sequences to fold per worker function call.
+chunk_size: 1
+
+# The compute configuration to use.
+compute_config:
+    # Specify we want the workstation parsl configuration
+    name: workstation
+    # Identify which GPUs to assign tasks to. It's generally recommended to first check
+    # nvidia-smi to see which GPUs are available. The numbers below are analogous to
+    # setting CUDA_VISIBLE_DEVICES=0
+    available_accelerators: ["0"]
