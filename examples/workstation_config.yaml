@@ -12,6 +12,29 @@ output_dir: examples/data/output
 # The number of sequences to fold per worker function call.
 chunk_size: 1
 
+
+# The folding parameters to use (these parameters are for chai1)
+folding_config:
+    # The sequence type (e.g., protein, dna, rna, ligand).
+    sequence_type: protein
+    # Whether to use ESM embeddings.
+    use_esm_embeddings: True
+    # Number of trunk recycles.
+    num_trunk_recycles: 3
+    # Number of diffn timesteps.
+    num_diffn_timesteps: 200
+    # Random seed.
+    seed: 42
+    # Device to use (cpu or cuda).
+    device: cuda
+    # Path to the download directory.
+    download_dir: examples/chai1
+
+# The folding parameters (for ESMFold)
+# folding_config_esmfold:
+#     # Path to the torch hub directory.
+#     torch_hub_dir: examples/torchhub
+
 # The compute configuration to use.
 compute_config:
     # Specify we want the workstation parsl configuration
