@@ -137,6 +137,17 @@ def read_fasta(fasta_file: str | Path) -> list[Sequence]:
     ]
 
 
+def write_fasta(
+    sequences: Sequence | list[Sequence],
+    fasta_file: str | Path,
+    mode: str = 'w',
+) -> None:
+    """Write or append sequences to a fasta file."""
+    seqs = [sequences] if isinstance(sequences, Sequence) else sequences
+    with open(fasta_file, mode) as f:
+        f.write('\n'.join(f'>{seq.tag}\n{seq.sequence}' for seq in seqs))
+
+
 def parse_plddt(pdb_file: str | io.StringIO) -> float:
     """Parse the pLDDT score from the structure file.
 

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import io
+import json
 from pathlib import Path
 
 import torch
@@ -47,13 +48,19 @@ class EsmFold:
 
     @exception_handler()
     @torch.no_grad()
-    def run(self, sequence: str) -> tuple[str, float] | None:
+    def run(
+        self,
+        sequence: str,
+        output_dir: str | Path,
+    ) -> tuple[str, float] | None:
         """Run the ESMFold model to predict structure.
 
         Parameters
         ----------
         sequence : str
             The sequence to fold.
+        output_dir : str | Path
+            The path to the output directory.
 
         Returns
         -------
@@ -67,5 +74,13 @@ class EsmFold:
 
         # Extract the pLDDT score from the structure
         plddt = parse_plddt(io.StringIO(structure))
+
+        # Write the structure to a PDB file
+        with open(Path(output_dir) / 'output.pdb', 'w') as f:
+            f.write(structure)
+
+        # Write the pLDDT to a JSON file
+        with open(Path(output_dir) / 'output.json', 'w') as f:
+            json.dump({'plddt': plddt}, f, indent=4)
 
         return structure, plddt

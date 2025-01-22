@@ -1,1 +1,1 @@
-"""Parsl ESMFold package."""
+"""parslfold package."""
