@@ -39,7 +39,7 @@ def exception_handler(
         def wrapper(*args: P.args, **kwargs: P.kwargs) -> T | None:
             try:
                 return func(*args, **kwargs)
-            except Exception as e:
+            except BaseException as e:
                 print(
                     f'{func.__name__} raised an exception: {e} '
                     f'On input {args}, {kwargs}\nReturning {default_return}',
