@@ -3,7 +3,7 @@ Fold proteins in parallel using [Parsl](https://parsl-project.org/).
 
 Supported folding methods:
 - [Chai-1](https://github.com/chaidiscovery/chai-lab)
-- [ESMFold](https://github.com/facebookresearch/esm?tab=readme-ov-file#esmfold)
+- [ESMFold](https://github.com/facebookresearch/esm?tab=readme-ov-file#esmfold) (WIP)
 
 ## Installation
 
