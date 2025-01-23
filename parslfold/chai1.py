@@ -93,7 +93,7 @@ class Chai1:
         # Run the folding model
         candidates = run_inference(
             fasta_file=tmp_fasta,
-            output_dir=tmp_dir,
+            output_dir=tmp_dir / 'output',
             num_trunk_recycles=self.num_trunk_recycles,
             num_diffn_timesteps=self.num_diffn_timesteps,
             seed=self.seed,
