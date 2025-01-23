@@ -69,6 +69,7 @@ examples/output/
 ### Notes
 - We only keep the highest confidence folded protein structure and its scores.
 - The subdirectories within `structures/` are named based on the input sequence fasta file name and the index of the sequence in the file (e.g., `<fasta-name>_seq_X`).
+- See `examples/chai1_example.py` for a quick example of how to fold a protein using the Chai-1 method in our package. This is the same core functionality as the main script, but without the parallelism provided by Parsl.
 
 
 ## Contributing
