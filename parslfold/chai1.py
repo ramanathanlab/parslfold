@@ -12,6 +12,7 @@ import torch
 from parsl_object_registry import clear_torch_cuda_memory_callback
 from parsl_object_registry import register
 
+from parslfold.utils import convert_cif_to_pdb
 from parslfold.utils import exception_handler
 from parslfold.utils import Sequence
 from parslfold.utils import write_fasta
@@ -114,10 +115,12 @@ class Chai1:
             best_cif.name.replace('pred', 'scores').replace('.cif', '.npz'),
         )
 
-        # TODO: Convert the cif file to PDB format
+        # Convert the cif file to PDB format
+        best_pdb = best_cif.with_suffix('.pdb')
+        convert_cif_to_pdb(best_cif, best_pdb)
 
         # Move the best candidate to the output directory
-        shutil.move(best_cif, Path(output_dir) / best_cif.name)
+        shutil.move(best_pdb, Path(output_dir) / best_pdb.name)
         shutil.move(scores_path, Path(output_dir) / scores_path.name)
 
         # Clean up the temporary directory

@@ -12,6 +12,8 @@ from typing import Callable
 from typing import TypeVar
 
 import yaml  # type: ignore[import-untyped]
+from Bio.PDB import MMCIFParser
+from Bio.PDB import PDBIO
 from Bio.PDB import PDBParser
 from pydantic import BaseModel as _BaseModel
 from pydantic import Field
@@ -178,3 +180,32 @@ def parse_plddt(pdb_file: str | io.StringIO) -> float:
     plddt = sum(b_factors) / len(b_factors)
 
     return plddt
+
+
+def convert_cif_to_pdb(cif_file: str | Path, pdb_file: str | Path) -> None:
+    """Convert a CIF file to a PDB file.
+
+    Parameters
+    ----------
+    cif_file : str | Path
+        Path to the input CIF file.
+    pdb_file : str | Path
+        Path to the output PDB file.
+
+    Returns
+    -------
+    None
+        The function saves the converted PDB file to the specified path.
+
+    Examples
+    --------
+    >>> convert_cif_to_pdb("example.cif", "example.pdb")
+    """
+    # Parse the CIF file
+    parser = MMCIFParser(QUIET=True)
+    structure = parser.get_structure('structure_name', str(cif_file))
+
+    # Save as PDB
+    io = PDBIO()
+    io.set_structure(structure)
+    io.save(str(pdb_file))
