@@ -7,7 +7,7 @@ fasta_path: examples/data
 # The path to the directory where the output files will be stored.
 # Will write a new subdirectory for each sequence containing the
 # folded structure PDB file and a JSON file with the plddt score.
-output_dir: examples/data/output
+output_dir: examples/output
 
 # The number of sequences to fold per worker function call.
 chunk_size: 1
