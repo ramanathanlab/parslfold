@@ -9,6 +9,7 @@ from typing import Literal
 from typing import Sequence
 from typing import Union
 
+from parsl.addresses import address_by_hostname
 from parsl.config import Config
 from parsl.executors import HighThroughputExecutor
 from parsl.launchers import MpiExecLauncher
@@ -68,7 +69,7 @@ class WorkstationConfig(BaseComputeConfig):
             retries=self.retries,
             executors=[
                 HighThroughputExecutor(
-                    address='localhost',
+                    address=address_by_hostname(),
                     label='htex',
                     cpu_affinity='block',
                     available_accelerators=self.available_accelerators,

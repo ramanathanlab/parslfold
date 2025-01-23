@@ -166,11 +166,11 @@ def parslfold_worker(
         # Create the output directory if it does not exist
         struct_output_dir.mkdir(exist_ok=True, parents=True)
 
-        # Write the sequence to a file for logging
-        write_fasta(seq, struct_output_dir / 'input.fasta')
-
         # Run the folding model
         folding_model.run(seq.sequence, output_dir=struct_output_dir)
+
+        # Write the sequence to a file for logging
+        write_fasta(seq, struct_output_dir / 'input.fasta')
 
 
 if __name__ == '__main__':
