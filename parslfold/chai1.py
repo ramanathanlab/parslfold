@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import shutil
 import uuid
 from pathlib import Path
 
@@ -115,9 +116,9 @@ class Chai1:
 
         # TODO: Convert the cif file to PDB format
 
-        # Copy the best candidate to the output directory
-        best_cif.rename(Path(output_dir) / best_cif.name)
-        scores_path.rename(Path(output_dir) / scores_path.name)
+        # Move the best candidate to the output directory
+        shutil.move(best_cif, Path(output_dir) / best_cif.name)
+        shutil.move(scores_path, Path(output_dir) / scores_path.name)
 
         # Clean up the temporary fasta file
         tmp_dir.unlink()
