@@ -120,5 +120,5 @@ class Chai1:
         shutil.move(best_cif, Path(output_dir) / best_cif.name)
         shutil.move(scores_path, Path(output_dir) / scores_path.name)
 
-        # Clean up the temporary fasta file
-        tmp_dir.unlink()
+        # Clean up the temporary directory
+        shutil.rmtree(tmp_dir)
