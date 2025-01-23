@@ -71,6 +71,10 @@ class Chai1Config(BaseModel):
         default=None,
         description='Path to the download directory.',
     )
+    tmp_dir: str | Path = Field(
+        default=Path('/dev/shm'),
+        description='Temporary directory for storing intermediate files.',
+    )
 
     @model_validator(mode='after')
     def _validate_paths(self) -> Self:
