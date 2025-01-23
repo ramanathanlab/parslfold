@@ -24,7 +24,7 @@ module use /soft/modulefiles; module load conda
 
 ## Usage
 
-To fold a set of proteins, run the following command (see YAML for details):
+To fold a set of proteins, run the following command (see example YAML config for details):
 ```bash
 nohup python -m parslfold.main --config examples/workstation_config.yaml &> nohup.log &
 ```
