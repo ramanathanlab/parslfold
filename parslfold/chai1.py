@@ -2,42 +2,17 @@
 
 from __future__ import annotations
 
-import io
 import os
+import uuid
 from pathlib import Path
-from typing import Any
 
 import torch
 from parsl_object_registry import clear_torch_cuda_memory_callback
 from parsl_object_registry import register
 
 from parslfold.utils import exception_handler
-
-
-class InMemorySequence:
-    """Interface to mock a Pathlib file object.
-
-    - Only implements the `exists` method to duck-type.
-    - Keeps the actual file contents in memory as a string.
-    """
-
-    def __init__(self, contents: str) -> None:
-        """Initialize the InMemorySequence object.
-
-        Parameters
-        ----------
-        contents : str
-            The contents of the file.
-        """
-        self.contents = contents
-
-    def exists(self) -> bool:
-        """Check if the file exists."""
-        return True
-
-    def open(self, *args: Any, **kwargs: Any) -> io.StringIO:
-        """Open the file."""
-        return io.StringIO(self.contents)
+from parslfold.utils import Sequence
+from parslfold.utils import write_fasta
 
 
 @register(shutdown_callback=clear_torch_cuda_memory_callback)
@@ -98,14 +73,17 @@ class Chai1:
         """
         from chai_lab.chai1 import run_inference
 
-        # Construct an in-memory fasta-file like object
-        fasta_file = InMemorySequence(
-            f'{self.sequence_type}|name=seq0\n{sequence}',
+        # Chai-1 requires a fasta file as input with specific header
+        seq = Sequence(
+            sequence=sequence,
+            tag=f'{self.sequence_type}|name=seq0',
         )
+        tmp_fasta = Path(f'/dev/shm/{uuid.uuid4()}.fasta')
+        write_fasta(seq, tmp_fasta)
 
         # Run the folding model
         run_inference(
-            fasta_file=fasta_file,
+            fasta_file=tmp_fasta,
             output_dir=Path(output_dir),
             num_trunk_recycles=self.num_trunk_recycles,
             num_diffn_timesteps=self.num_diffn_timesteps,
@@ -113,3 +91,6 @@ class Chai1:
             device=self.device,
             use_esm_embeddings=self.use_esm_embeddings,
         )
+
+        # Clean up the temporary fasta file
+        tmp_fasta.unlink()
