@@ -158,7 +158,7 @@ def parslfold_worker(
         folding_model = EsmFold(**folding_kwargs)  # type: ignore
 
     # Fold each sequence and write the results to disk
-    # the directories are named as {fasta_file.stem}_{i}
+    # the directories are named as {fasta_file.stem}_seq_{i}
     for seq in sequences:
         # Set an output directory for each sequence
         struct_output_dir = output_dir / seq.tag
@@ -212,7 +212,7 @@ if __name__ == '__main__':
         # Add a tag to each sequence containing the fasta file name
         # and the sequence index (to be used as a way to name the output files)
         seqs = [
-            Sequence(sequence=seq.sequence, tag=f'{fasta_file.stem}_{i}')
+            Sequence(sequence=seq.sequence, tag=f'{fasta_file.stem}_seq_{i}')
             for i, seq in enumerate(seqs)
         ]
 
