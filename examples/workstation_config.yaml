@@ -29,6 +29,8 @@ folding_config:
     device: cuda
     # Path to the download directory.
     download_dir: examples/chai1
+    # Temporary directory to store intermediate files.
+    tmp_dir: /dev/shm
 
 # The folding parameters (for ESMFold)
 # folding_config_esmfold:

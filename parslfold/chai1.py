@@ -6,6 +6,7 @@ import os
 import uuid
 from pathlib import Path
 
+import numpy as np
 import torch
 from parsl_object_registry import clear_torch_cuda_memory_callback
 from parsl_object_registry import register
@@ -28,6 +29,7 @@ class Chai1:
         seed: int = 42,
         device: str = 'cuda',
         download_dir: str | Path | None = None,
+        tmp_dir: str | Path = Path('/dev/shm'),
     ) -> None:
         """Initialize the Chai-1 model.
 
@@ -47,6 +49,8 @@ class Chai1:
             The device to use.
         download_dir : str | Path | None
             The path to the download directory.
+        tmp_dir : str | Path
+            The temporary directory.
         """
         self.sequence_type = sequence_type
         self.use_esm_embeddings = use_esm_embeddings
@@ -54,6 +58,7 @@ class Chai1:
         self.num_diffn_timesteps = num_diffn_timesteps
         self.seed = seed
         self.device = device
+        self.tmp_dir = Path(tmp_dir)
 
         # Set the download directory if provided
         if download_dir is not None:
@@ -73,18 +78,22 @@ class Chai1:
         """
         from chai_lab.chai1 import run_inference
 
+        # Create a temporary directory to write intermediate files
+        tmp_dir = self.tmp_dir / str(uuid.uuid4())
+        tmp_dir.mkdir(parents=True, exist_ok=True)
+
         # Chai-1 requires a fasta file as input with specific header
         seq = Sequence(
             sequence=sequence,
             tag=f'{self.sequence_type}|name=seq0',
         )
-        tmp_fasta = Path(f'/dev/shm/{uuid.uuid4()}.fasta')
+        tmp_fasta = tmp_dir / 'seq.fasta'
         write_fasta(seq, tmp_fasta)
 
         # Run the folding model
-        run_inference(
+        candidates = run_inference(
             fasta_file=tmp_fasta,
-            output_dir=Path(output_dir),
+            output_dir=tmp_dir,
             num_trunk_recycles=self.num_trunk_recycles,
             num_diffn_timesteps=self.num_diffn_timesteps,
             seed=self.seed,
@@ -92,5 +101,23 @@ class Chai1:
             use_esm_embeddings=self.use_esm_embeddings,
         )
 
+        # Find the best candidate
+        # The cif files are of the form pred.model_idx_0.cif
+        cif_paths = candidates.cif_paths
+        scores = [x.aggregate_score.item() for x in candidates.ranking_data]
+        best_idx = np.argmax(scores)
+        best_cif = cif_paths[best_idx]
+
+        # We also want to get scores file with format scores.model_idx_0.npz
+        scores_path = best_cif.with_name(
+            best_cif.name.replace('pred', 'scores').replace('.cif', '.npz'),
+        )
+
+        # TODO: Convert the cif file to PDB format
+
+        # Copy the best candidate to the output directory
+        best_cif.rename(Path(output_dir) / best_cif.name)
+        scores_path.rename(Path(output_dir) / scores_path.name)
+
         # Clean up the temporary fasta file
-        tmp_fasta.unlink()
+        tmp_dir.unlink()
