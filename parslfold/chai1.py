@@ -27,7 +27,7 @@ class Chai1:
         sequence_type: str = 'protein',
         use_esm_embeddings: bool = True,
         num_trunk_recycles: int = 3,
-        num_diffn_timesteps: int = 200,
+        num_diffn_timesteps: int = 80,
         seed: int = 42,
         device: str = 'cuda',
         download_dir: str | Path | None = None,
@@ -44,7 +44,9 @@ class Chai1:
         num_trunk_recycles : int
             The number of trunk recycles.
         num_diffn_timesteps : int
-            The number of diffn timesteps.
+            The number of diffusion timesteps, by default 80
+            following recommendations from here:
+            https://github.com/chaidiscovery/chai-lab/issues/80
         seed : int
             The random seed.
         device : str
