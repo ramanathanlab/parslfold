@@ -15,8 +15,10 @@ folding_model = Chai1(
     use_esm_embeddings=True,
     # Number of trunk recycles.
     num_trunk_recycles=3,
-    # Number of diffn timesteps.
-    num_diffn_timesteps=100,
+    # The number of diffusion timesteps, by default 80
+    # following recommendations from here:
+    # https://github.com/chaidiscovery/chai-lab/issues/80
+    num_diffn_timesteps=80,
     # Random seed.
     seed=42,
     # Device to use (cpu or cuda).

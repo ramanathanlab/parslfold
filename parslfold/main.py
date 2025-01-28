@@ -56,8 +56,10 @@ class Chai1Config(BaseModel):
         description='Number of trunk recycles.',
     )
     num_diffn_timesteps: int = Field(
-        default=200,
-        description='Number of diffn timesteps.',
+        default=80,
+        description='The number of diffusion timesteps, by default 80 '
+        'following recommendations from here: '
+        'https://github.com/chaidiscovery/chai-lab/issues/80',
     )
     seed: int = Field(
         default=42,
