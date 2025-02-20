@@ -22,29 +22,35 @@ from parslfold.utils import Sequence
 class EsmFoldConfig(BaseModel):
     """ESM-Fold configuration."""
 
+    tokenizer: str = Field(
+        default='facebook/esmfold_v1',
+        description='The tokenizer to use.',
+    )
+
+    model: str = Field(
+        default='facebook/esmfold_v1',
+        description='The model to use.',
+    )
+
+    use_float16: bool = Field(
+        default=False,
+        description='Whether to use float16.',
+    )
+
+    allow_tf32: bool = Field(
+        default=False,
+        description='Whether to allow tf32.',
+    )
+
+    chunk_size: int | None = Field(
+        default=None,
+        description='The chunk size for axial attention.',
+    )
+
     torch_hub_dir: Path = Field(
         default=Path.home() / '.cache' / 'torch' / 'hub',
         description='Path to the torch hub directory.',
     )
-
-    @model_validator(mode='after')
-    def _validate_paths(self) -> Self:
-        if not self.torch_hub_dir.exists():
-            raise FileNotFoundError(
-                f'Torch hub directory not found: {self.torch_hub_dir}',
-            )
-
-        # Resolve the path
-        self.torch_hub_dir = self.torch_hub_dir.resolve()
-
-        return self
-
-
-# TODO: Fill in the configs once it's done.
-class ESMFoldHFConfig(BaseModel):
-    """TODO: Fill in the configs once it's done."""
-
-    pass
 
 
 class Chai1Config(BaseModel):
