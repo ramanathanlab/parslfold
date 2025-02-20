@@ -19,6 +19,7 @@ classifiers = [
 dependencies = [
     "parsl>=2024.10.14",
     "chai_lab",
+    "transformers",
     "torch",
     "biopython",
     "pydantic",
