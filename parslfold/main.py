@@ -42,6 +42,8 @@ class EsmFoldConfig(BaseModel):
 
 # TODO: Fill in the configs once it's done.
 class ESMFoldHFConfig(BaseModel):
+    """TODO: Fill in the configs once it's done."""
+
     pass
 
 

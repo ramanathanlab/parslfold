@@ -45,7 +45,7 @@ class EsmFold:
 
         # Use GPU if available
         self.device = torch.device(
-            'cuda' if torch.cuda.is_available() else 'cpu'
+            'cuda' if torch.cuda.is_available() else 'cpu',
         )
         self.model.to(self.device)
 
@@ -86,7 +86,9 @@ class EsmFold:
         """
         # Tokenize the sequence with ESM-2 tokenizer.
         token_ids = self.tokenizer(
-            [sequence], return_tensors='pt', add_special_tokens=False
+            [sequence],
+            return_tensors='pt',
+            add_special_tokens=False,
         )['input_ids']
 
         token_ids = token_ids.to(self.device)
@@ -103,6 +105,8 @@ class EsmFold:
         with open(Path(output_dir) / 'output.json', 'w') as f:
             json.dump({'plddt': plddt}, f, indent=4)
             json.dump({'pTM': ptm}, f, indent=4)
+
+        return None
 
     @staticmethod
     def _convert_to_pdb(
@@ -132,7 +136,8 @@ class EsmFold:
         from transformers.models.esm.openfold_utils.protein import to_pdb
 
         final_atom_positions = atom14_to_atom37(
-            esmfold_output['positions'][-1], esmfold_output
+            esmfold_output['positions'][-1],
+            esmfold_output,
         )
         esmfold_output = {
             k: v.to('cpu').numpy() for k, v in esmfold_output.items()
@@ -163,5 +168,5 @@ class EsmFold:
         ptm = esmfold_output['ptm'].item()
         plddt = esmfold_output['plddt'].mean().item()
 
-        # concatenate each residue's pdb string to get the structure's pdb string.
+        # concatenate the residue pdbs and return the result.
         return ''.join(pdbs), ptm, plddt
