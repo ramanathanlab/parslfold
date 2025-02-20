@@ -47,11 +47,6 @@ class EsmFoldConfig(BaseModel):
         description='The chunk size for axial attention.',
     )
 
-    torch_hub_dir: Path = Field(
-        default=Path.home() / '.cache' / 'torch' / 'hub',
-        description='Path to the torch hub directory.',
-    )
-
 
 class Chai1Config(BaseModel):
     """Chai-1 configuration."""

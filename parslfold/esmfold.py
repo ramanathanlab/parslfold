@@ -29,8 +29,16 @@ class EsmFold:
 
         Parameters
         ----------
-        torch_hub_dir : Optional[str]
-            The path to the torch hub directory.
+        tokenizer : str
+            The tokenizer to use.
+        model : str
+            The model to use.
+        use_float16 : bool, optional
+            Whether to use float16, by default False.
+        allow_tf32 : bool, optional
+            Whether to allow tf32, by default False.
+        chunk_size : int | None, optional
+            The chunk size for axial attention, by default None.
         """
         # Status message (should only be printed once per cold start)
         print('Loading ESMFold model into memory')
@@ -105,8 +113,6 @@ class EsmFold:
         with open(Path(output_dir) / 'output.json', 'w') as f:
             json.dump({'plddt': plddt}, f, indent=4)
             json.dump({'pTM': ptm}, f, indent=4)
-
-        return None
 
     @staticmethod
     def _convert_to_pdb(
