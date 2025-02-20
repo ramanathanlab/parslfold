@@ -40,6 +40,11 @@ class EsmFoldConfig(BaseModel):
         return self
 
 
+# TODO: Fill in the configs once it's done.
+class ESMFoldHFConfig(BaseModel):
+    pass
+
+
 class Chai1Config(BaseModel):
     """Chai-1 configuration."""
 
