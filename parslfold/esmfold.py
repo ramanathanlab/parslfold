@@ -2,21 +2,32 @@
 
 from __future__ import annotations
 
+<<<<<<< HEAD
+=======
+import io
+>>>>>>> origin/main
 import json
 from pathlib import Path
 
 import torch
 from parsl_object_registry import clear_torch_cuda_memory_callback
 from parsl_object_registry import register
+<<<<<<< HEAD
 from transformers.models.esm.modeling_esmfold import EsmForProteinFoldingOutput
 
 from parslfold.utils import exception_handler
+=======
+
+from parslfold.utils import exception_handler
+from parslfold.utils import parse_plddt
+>>>>>>> origin/main
 
 
 @register(shutdown_callback=clear_torch_cuda_memory_callback)
 class EsmFold:
     """ESM-Fold model for protein structure prediction."""
 
+<<<<<<< HEAD
     def __init__(
         self,
         tokenizer: str = 'facebook/esmfold_v1',
@@ -25,10 +36,14 @@ class EsmFold:
         allow_tf32: bool = False,
         chunk_size: int | None = None,
     ) -> None:
+=======
+    def __init__(self, torch_hub_dir: str | Path | None = None) -> None:
+>>>>>>> origin/main
         """Initialize the ESM-Fold model.
 
         Parameters
         ----------
+<<<<<<< HEAD
         tokenizer : str
             The tokenizer to use.
         model : str
@@ -39,10 +54,15 @@ class EsmFold:
             Whether to allow tf32, by default False.
         chunk_size : int | None, optional
             The chunk size for axial attention, by default None.
+=======
+        torch_hub_dir : Optional[str]
+            The path to the torch hub directory.
+>>>>>>> origin/main
         """
         # Status message (should only be printed once per cold start)
         print('Loading ESMFold model into memory')
 
+<<<<<<< HEAD
         # Load the model and the tokenizer
         from transformers import AutoTokenizer
         from transformers import EsmForProteinFolding
@@ -62,12 +82,29 @@ class EsmFold:
             self.model = self.model.half()
         if allow_tf32:
             torch.backends.cuda.matmul.allow_tf32 = True
+=======
+        # Configure the torch hub directory
+        if torch_hub_dir is not None:
+            torch.hub.set_dir(torch_hub_dir)
+
+        # Load the model
+        self.model = torch.hub.load('facebookresearch/esm:main', 'esmfold_v1')
+        self.model.eval()
+
+        # Use GPU if available
+        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        self.model.to(device)
+>>>>>>> origin/main
 
         # Optionally, uncomment to set a chunk size for axial attention.
         # This can help reduce memory. Lower sizes will have lower memory
         # requirements at the cost of increased speed.
+<<<<<<< HEAD
         if chunk_size is not None:
             self.model.set_chunk_size(chunk_size)
+=======
+        self.model.set_chunk_size(128)
+>>>>>>> origin/main
 
     @exception_handler()
     @torch.no_grad()
@@ -176,3 +213,4 @@ class EsmFold:
 
         # concatenate the residue pdbs and return the result.
         return ''.join(pdbs), ptm, plddt
+
