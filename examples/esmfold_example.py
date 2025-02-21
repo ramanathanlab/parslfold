@@ -19,7 +19,7 @@ folding_model = EsmFold(
 )
 
 # Set an output directory for each sequence
-struct_output_dir = Path('/homes/ogokdemir/parslfold/examples/output')
+struct_output_dir = Path('examples/output_emsfold')
 
 # Create the output directory if it does not exist
 struct_output_dir.mkdir(exist_ok=True, parents=True)
