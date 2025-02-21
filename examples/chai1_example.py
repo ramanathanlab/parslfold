@@ -28,7 +28,7 @@ folding_model = Chai1(
 )
 
 # Set an output directory for each sequence
-struct_output_dir = Path('examples/output')
+struct_output_dir = Path('examples/output_chai/')
 
 # Create the output directory if it does not exist
 struct_output_dir.mkdir(exist_ok=True, parents=True)

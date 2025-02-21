@@ -4,6 +4,9 @@ authors:
   - family-names: Brace
     given-names: Alexander
     orcid: https://orcid.org/0000-0001-9873-9177
+  - family-names: Gokdemir
+    given-names: Ozan
+    orcid: https://orcid.org/0000-0001-5299-1983
 license: MIT
 repository-code: https://github.com/ramanathanlab/parslfold
 title: parslfold

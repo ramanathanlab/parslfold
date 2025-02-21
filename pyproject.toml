@@ -7,6 +7,7 @@ name = "parslfold"
 version = "0.1.0"
 authors = [
     {name = "Alexander Brace", email = "abrace@anl.gov"},
+    {name = "Ozan Gokdemir", email = "ogokdemir@anl.gov"},
 ]
 description = "Fold proteins in parallel using Parsl."
 readme = "README.md"
@@ -19,6 +20,7 @@ classifiers = [
 dependencies = [
     "parsl>=2024.10.14",
     "chai_lab",
+    "transformers",
     "torch",
     "biopython",
     "pydantic",

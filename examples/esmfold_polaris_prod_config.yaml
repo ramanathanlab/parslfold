@@ -1,0 +1,44 @@
+# This is an example of a workstation configuration file.
+
+# The path to the directory where the data is stored
+# (can also specify the path to a single fasta file)
+fasta_path: /lus/eagle/projects/FoundEpidem/ogokdemir/generated_sequences/proteins/2p5b_29kseqs_feb14.fasta
+
+# The path to the directory where the output files will be stored.
+# Will write a new subdirectory for each sequence containing the
+# folded structure PDB file and a JSON file with the plddt score.
+output_dir: /lus/eagle/projects/FoundEpidem/ogokdemir/instruct-dpo/parslfold_outputs
+
+# The number of sequences to fold per worker function call.
+chunk_size: 1
+
+
+# The folding parameters to use (these parameters are for chai1)
+folding_config:
+    # HF pointer to the tokenizer.
+    tokenizer: 'facebook/esmfold_v1'
+    # HF pointer to the model.
+    model: 'facebook/esmfold_v1'
+    # Whether to use half precision at inference.
+    use_float16: False
+    # Whether to allow TF32 at inference (if GPU supports it).
+    allow_tf32: False
+    # The chunk size for the axial attention.
+    chunk_size: null
+
+# The compute settings for the workflow
+compute_config:
+  # The name of the compute platform to use
+  name: polaris
+  # The number of compute nodes to use
+  num_nodes: 32
+  # Make sure to update the path to your conda environment and HF cache
+  worker_init: "module use /soft/modulefiles; module load conda; conda activate parslfold-env; export HF_HOME=/lus/eagle/projects/FoundEpidem/ogokdemir/hf_home"
+  # The scheduler options to use when submitting jobs
+  scheduler_options: "#PBS -l filesystems=home:eagle:grand"
+  # Make sure to change the account to the account you want to charge
+  account: FoundEpidem
+  # The HPC queue to submit to
+  queue: prod
+  # The amount of time to request for your job
+  walltime: "06:00:00"
