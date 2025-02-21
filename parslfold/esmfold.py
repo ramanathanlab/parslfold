@@ -8,8 +8,8 @@ from pathlib import Path
 import torch
 from parsl_object_registry import clear_torch_cuda_memory_callback
 from parsl_object_registry import register
-
 from transformers.models.esm.modeling_esmfold import EsmForProteinFoldingOutput
+
 from parslfold.utils import exception_handler
 
 
@@ -62,14 +62,6 @@ class EsmFold:
             self.model = self.model.half()
         if allow_tf32:
             torch.backends.cuda.matmul.allow_tf32 = True
-
-        # Load the model
-        self.model = torch.hub.load('facebookresearch/esm:main', 'esmfold_v1')
-        self.model.eval()
-
-        # Use GPU if available
-        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-        self.model.to(device)
 
         # Optionally, uncomment to set a chunk size for axial attention.
         # This can help reduce memory. Lower sizes will have lower memory
@@ -184,4 +176,3 @@ class EsmFold:
 
         # concatenate the residue pdbs and return the result.
         return ''.join(pdbs), ptm, plddt
-
