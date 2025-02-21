@@ -27,7 +27,7 @@ folding_config:
     chunk_size: null
 
 # The compute settings for the workflow
-compute_settings:
+compute_config:
   # The name of the compute platform to use
   name: polaris
   # The number of compute nodes to use
