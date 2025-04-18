@@ -6,6 +6,7 @@ import os
 import shutil
 import uuid
 from pathlib import Path
+from typing import Literal
 
 import numpy as np
 import torch
@@ -24,12 +25,12 @@ class Chai1:
 
     def __init__(
         self,
+        device: Literal['cuda', 'xpu', 'cpu'],
         sequence_type: str = 'protein',
         use_esm_embeddings: bool = True,
         num_trunk_recycles: int = 3,
         num_diffn_timesteps: int = 80,
         seed: int = 42,
-        device: str = 'cuda',
         download_dir: str | Path | None = None,
         tmp_dir: str | Path = Path('/dev/shm'),
     ) -> None:

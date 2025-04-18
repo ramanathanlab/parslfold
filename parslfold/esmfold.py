@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import Literal
 
 import torch
 from parsl_object_registry import clear_torch_cuda_memory_callback
@@ -19,6 +20,7 @@ class EsmFold:
 
     def __init__(
         self,
+        device=Literal['cpu', 'cuda', 'xpu'],
         tokenizer: str = 'facebook/esmfold_v1',
         model: str = 'facebook/esmfold_v1',
         use_float16: bool = False,
@@ -39,6 +41,8 @@ class EsmFold:
             Whether to allow tf32, by default False.
         chunk_size : int | None, optional
             The chunk size for axial attention, by default None.
+        platform : str, optional
+            The GPU vendor this code will run on. Intel or NVIDIA.
         """
         # Status message (should only be printed once per cold start)
         print('Loading ESMFold model into memory')
@@ -51,10 +55,8 @@ class EsmFold:
         self.model = EsmForProteinFolding.from_pretrained(model)
         self.model.eval()
 
-        # Use GPU if available
-        self.device = torch.device(
-            'cuda' if torch.cuda.is_available() else 'cpu',
-        )
+        # Load the model to xpu, cuda, or cpu.
+        self.device = torch.device(device)
         self.model.to(self.device)
 
         # Apply optimizations if requested in configs.
