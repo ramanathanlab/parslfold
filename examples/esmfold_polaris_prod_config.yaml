@@ -15,6 +15,8 @@ chunk_size: 1
 
 # The folding parameters to use (these parameters are for chai1)
 folding_config:
+    # Accelerator platform to use for folding.
+    device: cuda
     # HF pointer to the tokenizer.
     tokenizer: 'facebook/esmfold_v1'
     # HF pointer to the model.
