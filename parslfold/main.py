@@ -22,6 +22,11 @@ from parslfold.utils import Sequence
 class EsmFoldConfig(BaseModel):
     """ESM-Fold configuration."""
 
+    device: str = Field(
+        ..., 
+        description='Device to use (xpu, cuda, or cpu (not recommended)).',
+    )
+
     tokenizer: str = Field(
         default='facebook/esmfold_v1',
         description='The tokenizer to use.',
