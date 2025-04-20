@@ -18,10 +18,10 @@ classifiers = [
     "Programming Language :: Python :: 3",
 ]
 dependencies = [
-    "parsl>=2024.10.14",
-    "chai_lab",
-    "transformers",
+    "parsl>=2024.10.14", 
     "torch",
+    "transformers",
+    "chai_lab",
     "biopython",
     "pydantic",
     "PyYAML",

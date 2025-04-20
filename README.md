@@ -7,19 +7,41 @@ Supported folding methods:
 
 ## Installation
 
+### On Workstations (rbdgx, lambda, etc.)
+
 To install the package, run the following command:
 ```bash
+conda create -n parslfold-env python==3.10
+conda activate parslfold-env
 git clone git@github.com:ramanathanlab/parslfold.git
 cd parslfold
 pip install -U pip setuptools wheel
 pip install -e .
 ```
 
-### Installation on Polaris
+### On Polaris
 
 To install the package on Polaris@ALCF, run the following commands before the pip install command:
 ```bash
 module use /soft/modulefiles; module load conda
+conda create -n parslfold-env python==3.10
+conda activate parslfold-env
+git clone git@github.com:ramanathanlab/parslfold.git
+cd parslfold
+pip install -U pip setuptools wheel
+pip install -e .
+```
+
+### On Aurora
+**Make sure to be on a login node (not compute).**
+
+```bash
+module load frameworks
+python -m venv parslfold-env --system-site-packages
+git clone git@github.com:ramanathanlab/parslfold.git
+cd parslfold
+pip install -U pip setuptools wheel
+pip install -e .
 ```
 
 ## Usage
