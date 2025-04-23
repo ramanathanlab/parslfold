@@ -7,6 +7,12 @@ from pathlib import Path
 from typing import Literal
 
 import torch
+
+# Check if we are on Aurora, if so import the XPU backend.
+if torch.xpu.is_available():
+    import intel_extension_for_pytorch as ipex
+
+
 from parsl_object_registry import clear_torch_cuda_memory_callback
 from parsl_object_registry import register
 from transformers.models.esm.modeling_esmfold import EsmForProteinFoldingOutput
