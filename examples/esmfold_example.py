@@ -11,6 +11,7 @@ sequence = 'MNQKAYFGEFGGSFVSELLVPALRELEQAFDACLKDEKFQKEYFHLLKDFVGRPSPLTLCQNIVSNPK
 
 folding_model = EsmFold(
     # The sequence type (e.g., protein, dna, rna, ligand).
+    device='xpu',
     tokenizer='facebook/esmfold_v1',
     model='facebook/esmfold_v1',
     use_float16=False,

@@ -36,10 +36,11 @@ pip install -e .
 **Make sure to be on a login node (not compute).**
 
 ```bash
-module load frameworks
-python -m venv parslfold-env --system-site-packages
 git clone git@github.com:ramanathanlab/parslfold.git
 cd parslfold
+module load frameworks
+python -m venv parslfold-env --system-site-packages
+source parslfold-env/bin/activate
 pip install -U pip setuptools wheel
 pip install -e .
 ```
@@ -100,8 +101,8 @@ For development, it is recommended to use a virtual environment. The following
 commands will create a virtual environment, install the package in editable
 mode, and install the pre-commit hooks.
 ```bash
-python -m venv venv
-source venv/bin/activate
+python -m venv parslfold-env
+source parslfold-venv/bin/activate
 pip install -U pip setuptools wheel
 pip install -e '.[dev,docs]'
 pre-commit install

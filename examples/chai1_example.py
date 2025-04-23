@@ -8,6 +8,7 @@ from parslfold.chai1 import Chai1
 
 sequence = 'MKVAVLGAAGGIGQALALLLKTQLPSGSELSLYDIAPVTPGVAVDLSHIPTAVKIKGFSGEDATPALEGADVVLISAGVARKPGMDRSDLFNVNAGIVKNLVQQVAKTCPKACIGIITNPVNTTVAIAAEVLKKAGVYDKNKLFGVTTLDIIRSNTFVAELKGKQPGEVEVPVIGGHSGVTILPLLSQVPGVSFTEQEVADLTKRIQNAGTEVVEAKAGGGSATLSMGQAAARFGLSLVRALQGEQGVVECAYVEGDGQYARFFSQPLLLGKNGVEERKSIGTLSAFEQNALEGMLDTLKKDIALGEEFVNK'  # noqa: E501
 
+print('Loading Chai1 folding model...')
 folding_model = Chai1(
     # The sequence type (e.g., protein, dna, rna, ligand).
     sequence_type='protein',
@@ -22,10 +23,12 @@ folding_model = Chai1(
     # Random seed.
     seed=42,
     # Device to use (cpu or cuda).
-    device='cuda',
+    device='xpu',
     # Path to the download directory.
     download_dir='examples/chai1',
 )
+print('Loaded Chai1 folding model...')
+
 
 # Set an output directory for each sequence
 struct_output_dir = Path('examples/output_chai/')
@@ -33,5 +36,7 @@ struct_output_dir = Path('examples/output_chai/')
 # Create the output directory if it does not exist
 struct_output_dir.mkdir(exist_ok=True, parents=True)
 
+print('Starting to run folding...')
 # Run the folding model
 folding_model.run(sequence, output_dir=struct_output_dir)
+print('Finished folding...')
