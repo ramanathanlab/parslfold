@@ -7,16 +7,15 @@ fasta_path: /lus/flare/projects/FoundEpidem/ogokdemir/projects/trpB/30k_sampled_
 # The path to the directory where the output files will be stored.
 # Will write a new subdirectory for each sequence containing the
 # folded structure PDB file and a JSON file with the plddt score.
-output_dir: /lus/flare/projects/FoundEpidem/ogokdemir/projects/trpB/structures/30k_sampled_small_model_temp1_topP95
+output_dir: /lus/flare/projects/FoundEpidem/ogokdemir/projects/trpB/structures/esmfold-aurora-scale-test
 
 # The number of sequences to fold per worker function call.
-chunk_size: 1
-
+chunk_size: 5
 
 # The folding parameters to use (these parameters are for chai1)
 folding_config:
     # Accelerator platform to use for folding.
-    device: 'cpu'
+    device: 'xpu'
     # HF pointer to the tokenizer.
     tokenizer: 'facebook/esmfold_v1'
     # HF pointer to the model.
@@ -35,7 +34,7 @@ compute_config:
   # The number of compute nodes to use
   num_nodes: 4
   # Make sure to update the path to your conda environment and HF cache
-  worker_init: "module load frameworks; export HF_HOME=/lus/flare/projects/FoundEpidem/ogokdemir/hf_home"
+  worker_init: "module load frameworks; source ~/.bashrc; export HF_HOME=/lus/flare/projects/FoundEpidem/ogokdemir/hf_home"
   # The scheduler options to use when submitting jobs
   scheduler_options: "#PBS -l filesystems=home:flare"
   # Make sure to change the account to the account you want to charge
