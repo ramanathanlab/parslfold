@@ -218,8 +218,8 @@ class AuroraConfig(BaseComputeConfig):
         description='Maximum job time.',
     )
     cpus_per_node: int = Field(
-        default=208,
-        description='208 virtual CPUs per node with multithreading.',
+        default=204,
+        description='204 virtual CPUs per node with multithreading.',
     )
     cores_per_worker: float = Field(
         default=17,
@@ -246,9 +246,12 @@ class AuroraConfig(BaseComputeConfig):
         return Config(
             executors=[
                 HighThroughputExecutor(
+                    label='htex',
+                    heartbeat_period=15,
+                    heartbeat_threshold=120,
                     # Ensures one worker per GPU tile on each node
-                    available_accelerators=tile_names,
-                    max_workers_per_node=12,  # number of GPUs on a node
+                    available_accelerators=12,
+                    #max_workers_per_node=12,  # number of GPUs on a node
                     cores_per_worker=self.cores_per_worker,
                     # Distributes threads to workers/tiles optimized for Aurora
                     cpu_affinity='list:1-8,105-112:9-16,113-120:17-24,121-128:25-32,129-136:33-40,137-144:41-48,145-152:53-60,157-164:61-68,165-172:69-76,173-180:77-84,181-188:85-92,189-196:93-100,197-204',
