@@ -49,4 +49,4 @@ compute_config:
   # The HPC queue to submit to
   queue: prod
   # The amount of time to request for your job
-  walltime: "12:00:00"
+  walltime: "06:00:00"
