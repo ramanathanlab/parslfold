@@ -39,10 +39,11 @@ pip install -e .
 git clone git@github.com:ramanathanlab/parslfold.git
 cd parslfold
 module load frameworks
-python -m venv parslfold-env --system-site-packages
-source parslfold-env/bin/activate
 pip install -U pip setuptools wheel
 pip install -e .
+# Command above will install packages in your .local directory.
+# Add it to the path like so (add this in your .bashrc)
+export PATH=/home/<user-name>/.local/aurora/frameworks/2024.2.1_u1/bin:$PATH
 ```
 
 ## Usage
