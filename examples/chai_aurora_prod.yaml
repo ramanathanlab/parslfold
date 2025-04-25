@@ -1,0 +1,52 @@
+# This is an example of a workstation configuration file.
+
+# The path to the directory where the data is stored
+# (can also specify the path to a single fasta file)
+fasta_path: /lus/flare/projects/FoundEpidem/ogokdemir/projects/trpB/60k_baseline_proteins.fasta
+
+# The path to the directory where the output files will be stored.
+# Will write a new subdirectory for each sequence containing the
+# folded structure PDB file and a JSON file with the plddt score.
+output_dir: /lus/flare/projects/FoundEpidem/ogokdemir/projects/trpB/structures/chai-60k-2p5b-aurora-prod
+
+# The number of sequences to fold per worker function call.
+chunk_size: 5
+
+
+# The folding parameters to use (these parameters are for chai1)
+folding_config:
+    # The sequence type (e.g., protein, dna, rna, ligand).
+    sequence_type: protein
+    # Whether to use ESM embeddings.
+    use_esm_embeddings: True
+    # Number of trunk recycles.
+    num_trunk_recycles: 3
+    # The number of diffusion timesteps, by default 80
+    # following recommendations from here:
+    # https://github.com/chaidiscovery/chai-lab/issues/80
+    num_diffn_timesteps: 80
+    # Random seed.
+    seed: 42
+    # Device to use (cpu or cuda).
+    device: xpu
+    # Path to the download directory.
+    download_dir: /lus/flare/projects/FoundEpidem/ogokdemir/hf_home
+    # Temporary directory to store intermediate files.
+    tmp_dir: /dev/shm
+
+# The compute settings for the workflow
+compute_config:
+  # The name of the compute platform to use
+  name: aurora
+  # The number of compute nodes to use
+  num_nodes: 256
+  # Make sure to update the path to your conda environment and HF cache
+  worker_init: "source ~/.bashrc; module load frameworks; export HF_HOME=/lus/flare/projects/FoundEpidem/ogokdemir/hf_home"
+  # The scheduler options to use when submitting jobs
+  scheduler_options: "#PBS -l filesystems=home:flare"
+  # Make sure to change the account to the account you want to charge
+  account: FoundEpidem
+  # The HPC queue to submit to
+  queue: prod
+  # The amount of time to request for your job
+  walltime: "12:00:00"
