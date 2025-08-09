@@ -2,15 +2,15 @@
 
 # The path to the directory where the data is stored
 # (can also specify the path to a single fasta file)
-fasta_path: /lus/flare/projects/FoundEpidem/ogokdemir/projects/trpB/60k_baseline_proteins.fasta
+fasta_path: /flare/FoundEpidem/ogokdemir/projects/parslfold/60K_trpB_for_filtering_AA_25m_genslm_k40_p87.fasta
 
 # The path to the directory where the output files will be stored.
 # Will write a new subdirectory for each sequence containing the
 # folded structure PDB file and a JSON file with the plddt score.
-output_dir: /lus/flare/projects/FoundEpidem/ogokdemir/projects/trpB/structures/chai-60k-2p5b-aurora-prod
+output_dir: /flare/FoundEpidem/ogokdemir/projects/trpB/structures/60K_amin-aug8
 
 # The number of sequences to fold per worker function call.
-chunk_size: 5
+chunk_size: 10
 
 
 # The folding parameters to use (these parameters are for chai1)
@@ -39,14 +39,14 @@ compute_config:
   # The name of the compute platform to use
   name: aurora
   # The number of compute nodes to use
-  num_nodes: 256
+  num_nodes: 2
   # Make sure to update the path to your conda environment and HF cache
-  worker_init: "source ~/.bashrc; module load frameworks; export HF_HOME=/lus/flare/projects/FoundEpidem/ogokdemir/hf_home"
+  worker_init: "source /home/ogokdemir/torch_env_setup.sh;  HF_HOME=/lus/flare/projects/FoundEpidem/ogokdemir/hf_home"
   # The scheduler options to use when submitting jobs
   scheduler_options: "#PBS -l filesystems=home:flare"
   # Make sure to change the account to the account you want to charge
-  account: FoundEpidem
+  account: candle_aesp_CNDA
   # The HPC queue to submit to
-  queue: prod
+  queue: debug-scaling
   # The amount of time to request for your job
-  walltime: "06:00:00"
+  walltime: "00:30:00"

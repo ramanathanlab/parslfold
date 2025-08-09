@@ -73,7 +73,7 @@ class WorkstationConfig(BaseComputeConfig):
                     label='htex',
                     cpu_affinity='block',
                     available_accelerators=self.available_accelerators,
-                    worker_port_range=(10000, 20000),
+                    # Remove worker_port_range as it's not supported in newer Parsl versions
                     provider=LocalProvider(init_blocks=1, max_blocks=1),
                 ),
             ],
@@ -157,7 +157,7 @@ class PolarisConfig(BaseComputeConfig):
                     prefetch_capacity=0,
                     provider=PBSProProvider(
                         launcher=MpiExecLauncher(
-                            bind_cmd='--cpu-bind',
+                            bind_cmd=None,
                             overrides='--depth=64 --ppn 1',
                         ),
                         account=self.account,
@@ -247,55 +247,28 @@ class AuroraConfig(BaseComputeConfig):
             executors=[
                 HighThroughputExecutor(
                     label='htex',
-                    heartbeat_period=15,
-                    heartbeat_threshold=120,
-                    # Ensures one worker per GPU tile on each node
+                    # Distributes threads to workers/tiles in a way optimized for Aurora
+                    cpu_affinity="list:1-8,105-112:9-16,113-120:17-24,121-128:25-32,129-136:33-40,137-144:41-48,145-152:53-60,157-164:61-68,165-172:69-76,173-180:77-84,181-188:85-92,189-196:93-100,197-204",
+                    # Simplified configuration to avoid API compatibility issues
                     available_accelerators=12,
-                    #max_workers_per_node=12,  # number of GPUs on a node
                     cores_per_worker=self.cores_per_worker,
-                    # Distributes threads to workers/tiles optimized for Aurora
-                    cpu_affinity='list:1-8,105-112:9-16,113-120:17-24,121-128:25-32,129-136:33-40,137-144:41-48,145-152:53-60,157-164:61-68,165-172:69-76,173-180:77-84,181-188:85-92,189-196:93-100,197-204',
-                    # Increase if you have many more tasks than workers
-                    prefetch_capacity=0,
-                    # Options that specify properties of PBS Jobs
                     provider=PBSProProvider(
-                        # Project name
                         account=self.account,
-                        # Submission queue
                         queue=self.queue,
-                        # Commands run before workers launched
-                        # Activate your environment where Parsl is installed
                         worker_init=self.worker_init,
-                        # Wall time for batch jobs
                         walltime=self.walltime,
-                        # Change if data/modules located on other filesystem
                         scheduler_options=self.scheduler_options,
-                        # Ensures 1 manger per node;
-                        # the manager will distribute work to its 12 workers,
-                        # one per tile
-                        launcher=MpiExecLauncher(
-                            bind_cmd='--cpu-bind',
-                            overrides='--ppn 1',
-                        ),
-                        # options added to #PBS -l select aside from ncpus
+                        launcher=NoBindMpiExecLauncher(),
                         select_options='',
-                        # Number of nodes per PBS job
                         nodes_per_block=self.num_nodes,
-                        # Min number of concurrent PBS jobs running workflow
                         min_blocks=0,
-                        # Max number of concurrent PBS jobs running workflow
                         max_blocks=1,
-                        # Hardware threads per node
                         cpus_per_node=self.cpus_per_node,
                     ),
                 ),
             ],
-            # How many times to retry failed tasks
-            # this is necessary if you have tasks that are interrupted by a PBS
-            # so that they will restart in the next job
             retries=self.retries,
             run_dir=str(run_dir),
-            # Enable app cache for better performance on Aurora
             app_cache=True,
         )
 
@@ -305,3 +278,32 @@ ComputeConfigs = Union[
     PolarisConfig,
     AuroraConfig,
 ]
+
+
+class NoBindMpiExecLauncher(MpiExecLauncher):
+    """Custom ``mpiexec`` launcher that *never* adds bind options."""
+
+    def __init__(self, overrides: str = "-ppn 1") -> None:  # noqa: D401, ANN001
+        # Call parent with empty bind_cmd (disables ``--bind-to``)
+        super().__init__(bind_cmd="", overrides=overrides)
+
+    # pylint: disable=arguments-differ
+    def __call__(self, command, tasks_per_node, nodes_per_block):  # type: ignore[override]
+        """Return an mpiexec command string with binding flags removed."""
+        raw = super().__call__(command, tasks_per_node, nodes_per_block)
+        # The parent might still insert a stray "none" token where the binding
+        # target would have been.  Remove any occurrence of that pattern.
+        cleaned = (
+            raw.replace("--bind-to none", "")
+                .replace(" none -", " -")
+                .replace(" none ", " ")
+        )
+        # Replace bare script with module invocation for robustness
+        cleaned = cleaned.replace(
+            "process_worker_pool.py",
+            "$(which python) -m parsl.executors.high_throughput.process_worker_pool",
+        )
+        # Collapse any multiple spaces left after removal
+        while "  " in cleaned:
+            cleaned = cleaned.replace("  ", " ")
+        return cleaned.strip()
