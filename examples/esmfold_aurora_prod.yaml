@@ -7,32 +7,25 @@ fasta_path: /lus/flare/projects/FoundEpidem/ogokdemir/projects/trpB/structures/6
 # The path to the directory where the output files will be stored.
 # Will write a new subdirectory for each sequence containing the
 # folded structure PDB file and a JSON file with the plddt score.
-output_dir: /flare/FoundEpidem/ogokdemir/projects/trpB/structures/60k-amin-aug12/chai_60k_prod
+output_dir: /lus/flare/projects/FoundEpidem/ogokdemir/projects/trpB/structures/60k-amin-aug12/esmfol_60_prod
 
 # The number of sequences to fold per worker function call.
 chunk_size: 10
 
-
 # The folding parameters to use (these parameters are for chai1)
 folding_config:
-    # The sequence type (e.g., protein, dna, rna, ligand).
-    sequence_type: protein
-    # Whether to use ESM embeddings.
-    use_esm_embeddings: True
-    # Number of trunk recycles. You
-    num_trunk_recycles: 3
-    # The number of diffusion timesteps, by default 80
-    # following recommendations from here:
-    # https://github.com/chaidiscovery/chai-lab/issues/80
-    num_diffn_timesteps: 80
-    # Random seed.
-    seed: 42
-    # Device to use (cpu or cuda).
+    # Accelerator platform to use for folding.
     device: xpu
-    # Path to the download directory.
-    download_dir: /lus/flare/projects/FoundEpidem/ogokdemir/hf_home
-    # Temporary directory to store intermediate files.
-    tmp_dir: /dev/shm
+    # HF pointer to the tokenizer.
+    tokenizer: 'facebook/esmfold_v1'
+    # HF pointer to the model.
+    model: 'facebook/esmfold_v1'
+    # Whether to use half precision at inference.
+    use_float16: False
+    # Whether to allow TF32 at inference (if GPU supports it).
+    allow_tf32: False
+    # The chunk size for the axial attention.
+    chunk_size: null
 
 # The compute settings for the workflow
 compute_config:
